@@ -45,7 +45,8 @@ function App() {
               ref={droppableProvided.innerRef}
               data-testid="source-tray"
               style={{
-                backgroundColor: 'orange'
+                backgroundColor: 'orange',
+                minHeight: '20px'
               }}
             >
               {droppableProvided.placeholder}
