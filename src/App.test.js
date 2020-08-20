@@ -4,8 +4,6 @@ import App from './App';
 import {arrowDown, space} from "./KeyCodes";
 
 test('User can move an item from source tray to single column layout area', async () => {
-  jest.setTimeout(1000000);
-  jest.useFakeTimers();
   Object.defineProperties(document.documentElement, {
     clientHeight: {
       value: 10000,
@@ -130,20 +128,15 @@ test('User can move an item from source tray to single column layout area', asyn
 
   fireEvent.focus(item);
   fireEvent.keyDown(item, {keyCode: space});
-  jest.runOnlyPendingTimers();
 
+  // Required for state update in react-beautiful-dnd component
   act(() => {
     fireEvent.keyDown(item, {keyCode: arrowDown});
-    jest.runOnlyPendingTimers();
   });
 
   fireEvent.keyDown(item, {keyCode: space});
-  jest.runOnlyPendingTimers();
 
-
-  await waitFor(() => {
-    const itemAgain = screen.getByTestId('library-item-card');
-    expect(sourceTray).not.toContainElement(itemAgain);
-    expect(singleColumnLayoutArea).toContainElement(itemAgain);
-  });
+  const itemAgain = screen.getByTestId('library-item-card');
+  expect(sourceTray).not.toContainElement(itemAgain);
+  expect(singleColumnLayoutArea).toContainElement(itemAgain);
 });
