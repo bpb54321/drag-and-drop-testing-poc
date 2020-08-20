@@ -7,11 +7,9 @@ test('User can move an item from source tray to single column layout area', asyn
   Object.defineProperties(document.documentElement, {
     clientHeight: {
       value: 10000,
-      writable: true
     },
     clientWidth: {
       value: 2650,
-      writable: true
     }
   });
 
@@ -19,14 +17,6 @@ test('User can move an item from source tray to single column layout area', asyn
 
   const sourceTray = screen.getByTestId('source-tray');
   Object.defineProperties(sourceTray, {
-    clientHeight: {
-      value: 120,
-      writable: true
-    },
-    clientWidth: {
-      value: 2650,
-      writable: true
-    },
     getBoundingClientRect: {
       value: jest.fn(() => {
         console.log('sourceTray bounding client rect');
@@ -40,22 +30,13 @@ test('User can move an item from source tray to single column layout area', asyn
           "bottom": 20,
           "left": 0
         };
-      }),
-      writable: true
+      })
     }
   });
   const singleColumnLayoutArea = screen.getByTestId(
     'single-column-layout-area'
   );
   Object.defineProperties(singleColumnLayoutArea, {
-    clientHeight: {
-      value: 200,
-      writable: true
-    },
-    clientWidth: {
-      value: 2650,
-      writable: true
-    },
     getBoundingClientRect: {
       value: jest.fn(() => {
         console.log('singleColumnLayoutArea bounding client rect');
@@ -70,7 +51,6 @@ test('User can move an item from source tray to single column layout area', asyn
           "left": 0
         };
       }),
-      writable: true
     }
   });
 
@@ -110,19 +90,11 @@ test('User can move an item from source tray to single column layout area', asyn
 
   const item = screen.getByTestId('library-item-card');
   Object.defineProperties(item, {
-    clientHeight: {
-      value: 20,
-      writable: true
-    },
-    clientWidth: {
-      value: 2650,
-      writable: true
-    },
     getBoundingClientRect: {
       value: itemGetBoundingClientRect,
-      writable: true
     }
   });
+
   expect(sourceTray).toContainElement(item);
   expect(singleColumnLayoutArea).not.toContain(item);
 
