@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, screen, fireEvent, act } from '@testing-library/react';
+import {render, screen, fireEvent, act} from '@testing-library/react';
 import App from './App';
 import {arrowDown, space} from "./KeyCodes";
 
@@ -46,6 +46,12 @@ const itemRectAfterMove = {
 const windowHeight = 10000;
 const windowWidth = 2650;
 
+Object.defineProperties(HTMLElement.prototype, {
+  getBoundingClientRect: {
+    writable: true
+  }
+});
+
 describe('App', () => {
   beforeEach(() => {
     Object.defineProperties(document.documentElement, {
@@ -61,47 +67,35 @@ describe('App', () => {
     render(<App/>);
 
     const sourceTray = screen.getByTestId('source-tray');
-    Object.defineProperties(sourceTray, {
-      getBoundingClientRect: {
-        value: jest.fn(() => {
-          console.log('sourceTray bounding client rect');
-          return sourceTrayRect;
-        })
-      }
-    });
+    sourceTray.getBoundingClientRect = function () {
+      console.log('sourceTray bounding client rect');
+      return sourceTrayRect;
+    };
+
     const singleColumnLayoutArea = screen.getByTestId(
       'single-column-layout-area'
     );
-    Object.defineProperties(singleColumnLayoutArea, {
-      getBoundingClientRect: {
-        value: jest.fn(() => {
-          console.log('singleColumnLayoutArea bounding client rect');
-          return singleColumnLayoutAreaRect;
-        }),
-      }
-    });
+    singleColumnLayoutArea.getBoundingClientRect = function () {
+      console.log('singleColumnLayoutArea bounding client rect');
+      return singleColumnLayoutAreaRect;
+    }
 
-
-    const itemGetBoundingClientRect = jest.fn();
-    itemGetBoundingClientRect.mockImplementationOnce(() => {
+    const libraryItemGetBoundingClientRect = jest.fn();
+    libraryItemGetBoundingClientRect.mockImplementationOnce(() => {
       console.log('item bounding rect 1');
       return itemRectBeforeMove;
     });
-    itemGetBoundingClientRect.mockImplementationOnce(() => {
+    libraryItemGetBoundingClientRect.mockImplementationOnce(() => {
       console.log('item bounding rect 2');
       return itemRectBeforeMove;
     });
-    itemGetBoundingClientRect.mockImplementationOnce(() => {
+    libraryItemGetBoundingClientRect.mockImplementationOnce(() => {
       console.log('item bounding rect 3');
       return itemRectAfterMove;
     });
 
     const item = screen.getByTestId('library-item-card');
-    Object.defineProperties(item, {
-      getBoundingClientRect: {
-        value: itemGetBoundingClientRect,
-      }
-    });
+    item.getBoundingClientRect = libraryItemGetBoundingClientRect;
 
     expect(sourceTray).toContainElement(item);
     expect(singleColumnLayoutArea).not.toContain(item);
